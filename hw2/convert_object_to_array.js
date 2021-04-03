@@ -5,5 +5,3 @@ function toArr(obj){
     }
     return res
 }
-
-console.log(toArr({}))

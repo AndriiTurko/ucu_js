@@ -8,5 +8,3 @@ function avgWordLengthCalc(sentence){
     }
     return (lengthOfWords/amountOfWords).toFixed(2)
 }
-
-console.log(avgWordLengthCalc(""))
