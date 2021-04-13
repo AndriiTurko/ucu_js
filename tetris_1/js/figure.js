@@ -1,12 +1,12 @@
-// falling - new figure is put on the playgound
-// static - figure stoped moving. This happens when there are obsicles for any cells bellow
-function Figure(obsticles, state = STATES.FALLING) {
+// falling - new figure is put on the playground
+// static - figure stopped moving. This happens when there are obstacles for any cells bellow
+function Figure(obstacles, state = STATES.FALLING) {
   // Public properties
   this.cells = [];
   this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
   this.id = helperMethods.idGenerator.next().value;
   this.state = state;
-  this.obsticles = obsticles;
+  this.obsticles = obstacles;
 
   // Private methods
   const validFor = (direction) =>
@@ -49,6 +49,6 @@ function Figure(obsticles, state = STATES.FALLING) {
   this.rotate = () => {
     // TODO: this is complicated. But really can be solved with basic math.
     //       make sure you are rotating around the center element
-    //       all figures will be eaither 3 cells wide or 3 cells hight
+    //       all figures will be either 3 cells wide or 3 cells height
   }
 }

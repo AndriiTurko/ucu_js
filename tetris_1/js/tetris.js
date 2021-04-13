@@ -1,13 +1,14 @@
 function Tetris(state = GAME_STATES.PAUSED) {
   // Private properties
   const playground = PlaygroundFactory.getInstance();
-  let gameInverval = null; // TODO: will need to use this for gameover and pause events
+  let gameInterval = null; // TODO: will need to use this for gameover and pause events
 
   // public properties
-  this.figures = []; // TODO: seems to not be accesable outside
+  this.figures = []; // TODO: seems to not be accessible outside
 
   // Private methods
   const addFigure = () => {
+    destroyLine();
     const newFigure = new Figure(this.figures);
     this.figures.push(newFigure);
     return newFigure;
@@ -37,7 +38,41 @@ function Tetris(state = GAME_STATES.PAUSED) {
   };
 
   const destroyLine = () => {
-    // TODO
+    for (let i = 0; i < PLAYGROUND_HEIGHT; i++){
+
+      const temp_row = helperMethods.getRow(i);
+      // console.log('3');
+
+      let check = true;
+      let cellNode = temp_row.firstElementChild;
+      for (; cellNode !== temp_row.lastElementChild.nextElementSibling; cellNode = cellNode.nextElementSibling) {
+        // console.log('5');
+        // console.log(cellNode.className.toString().substr(5, 5));
+        if (cellNode.className.length === 4 || cellNode.className.substr(5, 5) === DEFAULT_COLOR){
+          // console.log('lol');
+          check = false;
+          break;
+        }
+      }
+      console.log('check ', check);
+
+      if (check) {
+        let cellNode = temp_row.firstElementChild;
+        for (; cellNode !== temp_row.lastElementChild.nextElementSibling; cellNode = cellNode.nextElementSibling) {
+          cellNode && cellNode.setAttribute('class', `cell ${DEFAULT_COLOR}`);
+        }
+        console.log(this.figures.length)
+        for (let f = 0; f < this.figures.length-1; f++){
+          for (let c = 0; c < this.figures[f].cells.length; c++){
+            if (this.figures[f].cells[c].y > i){
+              this.figures[f].cells[c].moveDown();
+            }
+          }
+
+        }
+      }
+
+    }
   };
 
   const checkForGameOver = () => {
@@ -51,9 +86,8 @@ function Tetris(state = GAME_STATES.PAUSED) {
     playground.render();
     document.addEventListener('keydown', ({keyCode}) =>  events(keyCode));
 
-    gameInverval = setInterval(() => { // TODO: maybe it's better to have a separate method for this?
+    gameInterval = setInterval(() => { // TODO: maybe it's better to have a separate method for this?
       getCurrentFigure().moveDown();
-      destroyLine(); // TODO: not sure where this method shoud be. Maybe in moveDown?
       checkForGameOver(); // TODO
     }, INTERVAL);
   };

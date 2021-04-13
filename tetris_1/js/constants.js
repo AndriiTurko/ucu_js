@@ -1,7 +1,7 @@
 // Playground
 const PLAYGROUND_HEIGHT = 15;
 const PLAYGROUND_WIDTH = 7;
-const PLAYGROUND_NODE_ID = 'playgound';
+const PLAYGROUND_NODE_ID = 'playground';
 
 // colors
 const COLORS = ['red', 'purple', 'green', 'yellow', 'blue'];
@@ -18,7 +18,7 @@ const STATES = {
 const INITIAL_POSITIONS = [
   [[PLAYGROUND_HEIGHT + 1, 1], [PLAYGROUND_HEIGHT, 1], [PLAYGROUND_HEIGHT, 2], [PLAYGROUND_HEIGHT, 3]],
   [[PLAYGROUND_HEIGHT + 2, 2], [PLAYGROUND_HEIGHT + 1, 2], [PLAYGROUND_HEIGHT, 2]],
-  [[PLAYGROUND_HEIGHT + 2, 3], [PLAYGROUND_HEIGHT + 1, 3], [PLAYGROUND_HEIGHT, 3]],
+  [[PLAYGROUND_HEIGHT + 1, 3], [PLAYGROUND_HEIGHT + 1, 4], [PLAYGROUND_HEIGHT, 3], [PLAYGROUND_HEIGHT, 4]],
 ];
 
 // key codes for keydown events

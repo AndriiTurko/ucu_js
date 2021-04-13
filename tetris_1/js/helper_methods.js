@@ -39,7 +39,7 @@ helperMethods.createCell = (x, y) => {
 
 // ID helpers
 helperMethods.idMaker = function* () {
-  var index = 1;
+  let index = 1;
   while (true)
     yield index++;
 };

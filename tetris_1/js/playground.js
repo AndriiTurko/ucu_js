@@ -1,4 +1,4 @@
-// we don't want to have multiple playgounds instances
+// we don't want to have multiple playgrounds instances
 // singleton patterns ensures that at a given time, we have only
 // one instance
 
@@ -9,7 +9,7 @@
 const PlaygroundFactory = (function () {
   // private properties
   const PLAYGROUND_NODE = document.getElementById(PLAYGROUND_NODE_ID);
-  let playgrond;
+  let playground;
 
   // private constructor
   function PlaygroundSingleton() {
@@ -30,12 +30,12 @@ const PlaygroundFactory = (function () {
 
   return {
     getInstance() {
-      if (!playgrond) {
-        playgrond = new PlaygroundSingleton();
-        // Hide the constructor so the returned object can't be new'd...
-        playgrond.constructor = null;
+      if (!playground) {
+        playground = new PlaygroundSingleton();
+        // Hide the constructor so the returned object can't be newed...
+        playground.constructor = null;
       }
-      return playgrond;
+      return playground;
     }
  };
 })();
