@@ -39,9 +39,9 @@ function Tetris(state = GAME_STATES.PAUSED) {
 
   const destroyLine = () => {
     // while (check){
-    let check = true;
-    for (let i = 0; i < PLAYGROUND_HEIGHT; i++){
 
+    for (let i = 0; i < PLAYGROUND_HEIGHT; i++){
+      let check = true;
       const temp_row = helperMethods.getRow(i);
       let cellNode = temp_row.firstElementChild;
       for (; cellNode !== temp_row.lastElementChild.nextElementSibling; cellNode = cellNode.nextElementSibling) {
@@ -77,12 +77,16 @@ function Tetris(state = GAME_STATES.PAUSED) {
 
   const checkForPause = () => {
     if (this.state === GAME_STATES.PLAYING){
-      console.log('event PAUSE');
       this.state = GAME_STATES.PAUSED;
+      document.removeEventListener('keydown', listener);
+      document.addEventListener('keydown', pause);
     }
     else {
       console.log('Continue playing)');
       this.state = GAME_STATES.PLAYING
+      document.removeEventListener('keydown', pause);
+      document.addEventListener('keydown', listener);
+
     }
   }
 
@@ -93,23 +97,28 @@ function Tetris(state = GAME_STATES.PAUSED) {
     }
   };
 
+  const gameOver = (gameInterval) => {
+    document.removeEventListener('keydown', listener);
+    clearInterval(gameInterval);
+  }
+
+  const listener = ({keyCode}) => events(keyCode);
+  const pause = ({keyCode}) => keyCode === PAUSE && events(keyCode);
+
   // public methods
   this.play = () => {
-    this.state = GAME_STATES.PLAYING; // TODO:
+    this.state = GAME_STATES.PLAYING;
 
     playground.render();
-    document.addEventListener('keydown', ({keyCode}) =>  events(keyCode));
+    document.addEventListener('keydown', listener);
 
-    let gameInterval = setInterval(() => { // TODO: maybe it's better to have a separate method for this?
+    let gameInterval = setInterval(() => {
+      checkForGameOver();
       if (this.state === GAME_STATES.PLAYING) {
         getCurrentFigure().moveDown();
-        checkForGameOver();
       } else if (this.state === GAME_STATES.GAMEOVER) {
-        console.log("kukhar molodets")
-        document.removeEventListener('keydown', ({keyCode}) => events(keyCode));
-        clearInterval(gameInterval);
+        gameOver(gameInterval);
       }
-
     }, INTERVAL);
   };
 }
