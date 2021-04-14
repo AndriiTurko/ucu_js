@@ -20,7 +20,7 @@ function Cell(x, y, color, figureId, obstacles, state = STATES.FALLING) {
     };
     const {x, y} = directions[direction];
 
-    return obstacles.some(({cells}) =>
+    return this.obstacles.some(({cells}) =>
       cells.some(cell => cell.figureId !== this.figureId && cell.x === x && cell.y === y)
     );
   }
@@ -63,7 +63,8 @@ function Cell(x, y, color, figureId, obstacles, state = STATES.FALLING) {
   };
 
   this.destroy = () => {
-    this.deRender()
+    this.x += 1000;
+    this.y -= 1000
     // TODO: make sure this object no longer exists in the memory.
     //       maybe it will be better to have this kind of function in Figure object
   }

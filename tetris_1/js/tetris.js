@@ -1,7 +1,8 @@
 function Tetris(state = GAME_STATES.PAUSED) {
   // Private properties
   const playground = PlaygroundFactory.getInstance();
-  let gameInterval = null; // TODO: will need to use this for gameover and pause events
+   // TODO: will need to use this for gameover and pause events
+  this.state = state;
 
   // public properties
   this.figures = []; // TODO: seems to not be accessible outside
@@ -29,8 +30,7 @@ function Tetris(state = GAME_STATES.PAUSED) {
         getCurrentFigure().moveLeft();
       },
       [PAUSE]() {
-        console.log('event PAUSE'); // TODO: KILL/REMOVE INTERVAL?
-        this.state = GAME_STATES.PAUSED; // ?? TODO:
+        checkForPause();
       },
     }
 
@@ -38,45 +38,59 @@ function Tetris(state = GAME_STATES.PAUSED) {
   };
 
   const destroyLine = () => {
+    // while (check){
+    let check = true;
     for (let i = 0; i < PLAYGROUND_HEIGHT; i++){
 
       const temp_row = helperMethods.getRow(i);
-      // console.log('3');
-
-      let check = true;
       let cellNode = temp_row.firstElementChild;
       for (; cellNode !== temp_row.lastElementChild.nextElementSibling; cellNode = cellNode.nextElementSibling) {
-        // console.log('5');
-        // console.log(cellNode.className.toString().substr(5, 5));
+
         if (cellNode.className.length === 4 || cellNode.className.substr(5, 5) === DEFAULT_COLOR){
-          // console.log('lol');
           check = false;
           break;
         }
       }
-      console.log('check ', check);
 
       if (check) {
-        let cellNode = temp_row.firstElementChild;
-        for (; cellNode !== temp_row.lastElementChild.nextElementSibling; cellNode = cellNode.nextElementSibling) {
-          cellNode && cellNode.setAttribute('class', `cell ${DEFAULT_COLOR}`);
-        }
-        console.log(this.figures.length)
-        for (let f = 0; f < this.figures.length-1; f++){
-          for (let c = 0; c < this.figures[f].cells.length; c++){
-            if (this.figures[f].cells[c].y > i){
-              this.figures[f].cells[c].moveDown();
-            }
-          }
+        let temp_fig = []
+        for (let f = 0; f < this.figures.length; f++){
+          this.figures[f].cells.filter(el => el.y === i).forEach(cell => cell.deRender());
+          this.figures[f].cells.filter(el => el.y === i).forEach(cell => cell.destroy());
 
+          temp_fig.push(this.figures[f].id);
+        }
+        for (let f of temp_fig){
+          this.figures.filter(el => el.id !== f);
+        }
+        console.log((this.figures));
+
+        // console.log(this.figures.length)
+        for (let f = 0; f < this.figures.length; f++){
+          this.figures[f].cells.filter(c => c.y > i).forEach(cell => cell.deRender());
+          this.figures[f].cells.filter(c => c.y > i).forEach(cell => cell.moveDown());
         }
       }
 
     }
-  };
+  }
+
+  const checkForPause = () => {
+    if (this.state === GAME_STATES.PLAYING){
+      console.log('event PAUSE');
+      this.state = GAME_STATES.PAUSED;
+    }
+    else {
+      console.log('Continue playing)');
+      this.state = GAME_STATES.PLAYING
+    }
+  }
 
   const checkForGameOver = () => {
-    // TODO
+    if (this.figures.find(figure => figure.state === STATES.STATIC && figure.cells.find(cell => cell.y >= PLAYGROUND_HEIGHT-1))){
+      console.log("GAME-OVER");
+      this.state = GAME_STATES.GAMEOVER;
+    }
   };
 
   // public methods
@@ -86,9 +100,16 @@ function Tetris(state = GAME_STATES.PAUSED) {
     playground.render();
     document.addEventListener('keydown', ({keyCode}) =>  events(keyCode));
 
-    gameInterval = setInterval(() => { // TODO: maybe it's better to have a separate method for this?
-      getCurrentFigure().moveDown();
-      checkForGameOver(); // TODO
+    let gameInterval = setInterval(() => { // TODO: maybe it's better to have a separate method for this?
+      if (this.state === GAME_STATES.PLAYING) {
+        getCurrentFigure().moveDown();
+        checkForGameOver();
+      } else if (this.state === GAME_STATES.GAMEOVER) {
+        console.log("kukhar molodets")
+        document.removeEventListener('keydown', ({keyCode}) => events(keyCode));
+        clearInterval(gameInterval);
+      }
+
     }, INTERVAL);
   };
 }

@@ -1,6 +1,6 @@
 // Playground
 const PLAYGROUND_HEIGHT = 15;
-const PLAYGROUND_WIDTH = 7;
+const PLAYGROUND_WIDTH = 8;
 const PLAYGROUND_NODE_ID = 'playground';
 
 // colors

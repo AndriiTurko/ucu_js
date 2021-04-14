@@ -6,7 +6,7 @@ function Figure(obstacles, state = STATES.FALLING) {
   this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
   this.id = helperMethods.idGenerator.next().value;
   this.state = state;
-  this.obsticles = obstacles;
+  this.obstacles = obstacles;
 
   // Private methods
   const validFor = (direction) =>
@@ -14,7 +14,7 @@ function Figure(obstacles, state = STATES.FALLING) {
 
   // initialise figure cells
   const addCell = (x, y) =>
-    this.cells.push(new Cell(x, y, this.color, this.id, this.obsticles, this.state));
+    this.cells.push(new Cell(x, y, this.color, this.id, this.obstacles, this.state));
 
   const generateCoordinates = () =>
     INITIAL_POSITIONS[Math.floor(Math.random() * INITIAL_POSITIONS.length)];
